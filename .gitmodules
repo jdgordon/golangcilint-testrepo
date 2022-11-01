@@ -1,0 +1,3 @@
+[submodule "external/loramac-node"]
+	path = external/loramac-node
+	url = https://github.com/lora-net/loramac-node.git
