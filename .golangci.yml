@@ -1,0 +1,118 @@
+linters-settings:
+  contextcheck:
+    disable-fact: true
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(gitlab.com/fleetspace/monoverse)
+  gocognit:
+    min-complexity: 50
+  loggercheck:
+    kitlog: false
+    klog: false
+    logr: false
+    zap: true
+  paralleltest:
+    ignore-missing: true
+  stylecheck:
+    dot-import-whitelist:
+      - github.com/onsi/ginkgo/v2
+      - github.com/onsi/gomega
+
+linters:
+  disable-all: true
+  enable:
+    - "asciicheck"
+    - "bodyclose"
+    - "contextcheck"
+    - "depguard"
+    - "dogsled"
+    - "dupl"
+    - "errcheck"
+    - "errchkjson"
+    - "errorlint"
+    - "exhaustive"
+    - "exportloopref"
+    - "gci"
+    - "gochecknoglobals"
+    - "gochecknoinits"
+    - "gocognit"
+    - "goconst"
+    - "gocritic"
+    - "gocyclo"
+    - "goerr113"
+    - "gofmt"
+    - "gofumpt"
+    - "goheader"
+    - "goimports"
+    - "gomodguard"
+    - "goprintffuncname"
+    - "gosec"
+    - "gosimple"
+    - "govet"
+    - "ineffassign"
+    - "interfacebloat"
+    - "loggercheck"
+    - "misspell"
+    - "nakedret"
+    - "nestif"
+    - "noctx"
+    - "nolintlint"
+    - "nosprintfhostport"
+    - "paralleltest"
+    - "prealloc"
+    - "reassign"
+    - "revive"
+    - "rowserrcheck"
+    - "sqlclosecheck"
+    - "staticcheck"
+    - "stylecheck"
+    - "tparallel"
+    - "unconvert"
+    - "unparam"
+    - "unused"
+    - "usestdlibvars"
+    - "whitespace"
+
+  # don't enable:
+  # - "dupword"
+  # - "exhaustivestruct"
+  # - "funlen"
+  # - "godot"
+  # - "godox"
+  # - "gomnd"
+  # - "lll"
+  # - "nlreturn"
+  # - "testableexamples"
+  # - "testpackage"
+  # - "wrapcheck"
+  # - "wsl"
+
+issues:
+  exclude-rules:
+    - path: '(.+)_test\.go'
+      linters:
+        - "dupl"             # we have a lot of duplicate code in tests
+        - "gochecknoglobals" # we use globals in tests
+        - "gocognit"         # we have a lot of bloated code in tests
+        - "goerr113"
+    - path: 'eros/(.+)/tests?/'
+      linters:
+        - "gochecknoglobals" # ginkgo encourages using globals
+        - "gochecknoinits"   # ginkgo encourages using init
+        - "gocognit"         # we have a lot of bloated code in tests
+    - path: 'eros/(.+)/tests?/'
+      text: "dot-imports: should not use dot imports" # whitelist ginkgo dot imports in revive
+
+run:
+  timeout: 15m
+  go: "1.17"
+  max-same-issues: 0
+  skip-dirs:
+    - eros/external/lora-gateway-bridge
+    - exosphere/gopkg/swagger
+    - node_modules
+    - external
+  skip-files:
+    - schema.resolvers.go # because this is semi-generated
